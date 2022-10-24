@@ -126,6 +126,22 @@ Tree.prototype.delete = function (value, root){
     this.delete(value, root.left);
   };
 };
+Tree.prototype.levelOrder = function (queue,func){
+  if (queue.length==0) return;
+  //initalize newQueue
+  let newQueue=[];
+  while (queue.length>0){
+    //get next item in queue
+    let first = queue.shift();
+    //call the function provided as an argument on the next item
+    func(first);
+    //add children to the queue
+    if (first.left!=null) newQueue.push(first.left);
+    if (first.right!=null) newQueue.push(first.right);
+  }
+  //recursively call level order again with the new queue (next level depth of the tree)
+  this.levelOrder(newQueue, func);
+};
 Tree.prototype.nextBiggest = function (root){
   if (root.left==null) return root;
   return this.nextBiggest(root.left);
@@ -170,5 +186,8 @@ let DEFAULTTREE= new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 //Test find method
 //console.log(DEFAULTTREE.find(55,DEFAULTTREE.root));
 
+//call function on all tree items in level order
+//DEFAULTTREE.levelOrder([DEFAULTTREE.root],console.log)
 
+//prints tree nicely (leave at the end of this script)
 prettyPrint(DEFAULTTREE.root);
