@@ -126,6 +126,31 @@ Tree.prototype.delete = function (value, root){
     this.delete(value, root.left);
   };
 };
+Tree.prototype.depth = function (node, root, counter=0){
+  if (node==root) return counter;
+  //If the root is null there is no more depth to recurse through
+  if (root==null) return 0;
+  return Math.max(this.depth(node,root.left, counter+=1),this.depth(node, root.right, counter+=1));
+};
+Tree.prototype.height = function (node, counter=0){
+  if (node==null) return counter;
+  return Math.max(this.height(node.left, counter), this.height(node.right, counter))+1;
+};
+Tree.prototype.isBalanced = function (){
+
+};
+Tree.prototype.rebalance = function (){
+  //push each "data" value from every array element to a new array so it can be used in build tree
+  this.array=[];
+  this.inorder(this.root).forEach((item)=>{
+    this.array.push(item.data);
+  });
+  //remove duplicates from the array
+  this.array=this.removeDuplicates(this.array);
+  //build new tree
+  this.root=this.buildTree(this.array, 0 , (this.array.length)-1);
+
+};
 Tree.prototype.levelOrder = function (queue,func){
   if (queue.length==0) return;
   //initalize newQueue
@@ -155,6 +180,36 @@ Tree.prototype.removeDuplicates = function (array){
   });
   return newArray;
 };
+Tree.prototype.inorder = function (root, array=[]){
+  if (root==null) {
+    return;
+  }
+  this.inorder(root.left, array);
+  array.push(root);
+  this.inorder(root.right, array);
+
+  return array;
+};
+Tree.prototype.preorder = function (root, array=[]){
+  if (root==null) {
+    return;
+  }
+  array.push(root);
+  this.inorder(root.left, array);
+  this.inorder(root.right, array);
+
+  return array;
+};
+Tree.prototype.postorder = function (root, array=[]){
+  if (root==null) {
+    return;
+  }
+  this.inorder(root.left, array);
+  this.inorder(root.right, array);
+  array.push(root);
+
+  return array;
+};
 //////////////////////////////////////
 //Pretty print function is from the assignment
 const prettyPrint = (node, prefix = '', isLeft = true) => {
@@ -170,24 +225,11 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 
 //Test build tree method
 let DEFAULTTREE= new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-
-//Test insert method
-//DEFAULTTREE.insert(55,DEFAULTTREE.root);
-
-//deleting node that is a leaf
-//DEFAULTTREE.delete(1, DEFAULTTREE.root);
-
-//deleting node with one child
-//DEFAULTTREE.delete(7, DEFAULTTREE.root);
-
-//deleting node with two children
-//DEFAULTTREE.delete(8, DEFAULTTREE.root);
-
-//Test find method
-//console.log(DEFAULTTREE.find(55,DEFAULTTREE.root));
-
-//call function on all tree items in level order
-//DEFAULTTREE.levelOrder([DEFAULTTREE.root],console.log)
+DEFAULTTREE.insert(14, DEFAULTTREE.root);
+DEFAULTTREE.insert(11, DEFAULTTREE.root);
+prettyPrint(DEFAULTTREE.root);
+console.log(DEFAULTTREE.isBalanced());
+DEFAULTTREE.rebalance();
 
 //prints tree nicely (leave at the end of this script)
 prettyPrint(DEFAULTTREE.root);
