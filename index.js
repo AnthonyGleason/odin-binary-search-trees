@@ -136,8 +136,15 @@ Tree.prototype.height = function (node, counter=0){
   if (node==null) return counter;
   return Math.max(this.height(node.left, counter), this.height(node.right, counter))+1;
 };
-Tree.prototype.isBalanced = function (){
-
+Tree.prototype.isBalanced = function (root , bool=false){
+  if (root==null) return;
+  if (this.height(root.left)-this.height(root.right)==0 || this.height(root.left)-this.height(root.right)==1){
+    bool=true;
+    return bool;
+  };
+  this.isBalanced(root.left);
+  this.isBalanced(root.right);
+  return bool;
 };
 Tree.prototype.rebalance = function (){
   //push each "data" value from every array element to a new array so it can be used in build tree
@@ -223,13 +230,56 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 }
 ///////////////////////////////////
 
-//Test build tree method
+//Driver function
+//1
 let DEFAULTTREE= new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+//2
+console.log(DEFAULTTREE.isBalanced(DEFAULTTREE.root));
+//3
+//In order
+let tempArray=[];
+DEFAULTTREE.inorder(DEFAULTTREE.root).forEach((item)=>{
+  tempArray.push(item.data);
+});
+console.log(tempArray);
+//Pre order
+tempArray=[];
+DEFAULTTREE.preorder(DEFAULTTREE.root).forEach((item)=>{
+  tempArray.push(item.data);
+});
+console.log(tempArray);
+//Post order
+tempArray=[];
+DEFAULTTREE.postorder(DEFAULTTREE.root).forEach((item)=>{
+  tempArray.push(item.data);
+});
+console.log(tempArray);
+//4
 DEFAULTTREE.insert(14, DEFAULTTREE.root);
-DEFAULTTREE.insert(11, DEFAULTTREE.root);
-prettyPrint(DEFAULTTREE.root);
-console.log(DEFAULTTREE.isBalanced());
+DEFAULTTREE.insert(22, DEFAULTTREE.root);
+DEFAULTTREE.insert(24, DEFAULTTREE.root);
+//5
+console.log(DEFAULTTREE.isBalanced(DEFAULTTREE.root));
+//6
 DEFAULTTREE.rebalance();
-
-//prints tree nicely (leave at the end of this script)
-prettyPrint(DEFAULTTREE.root);
+//7
+console.log(DEFAULTTREE.isBalanced(DEFAULTTREE.root));
+//8
+//In order
+tempArray=[];
+DEFAULTTREE.inorder(DEFAULTTREE.root).forEach((item)=>{
+  tempArray.push(item.data);
+});
+console.log(tempArray);
+//Pre order
+tempArray=[];
+DEFAULTTREE.preorder(DEFAULTTREE.root).forEach((item)=>{
+  tempArray.push(item.data);
+});
+console.log(tempArray);
+//Post order
+tempArray=[];
+DEFAULTTREE.postorder(DEFAULTTREE.root).forEach((item)=>{
+  tempArray.push(item.data);
+});
+console.log(tempArray);
